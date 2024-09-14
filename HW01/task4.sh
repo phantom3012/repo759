@@ -8,4 +8,4 @@
 
 cd $SLURM_SUBMIT_DIR
 
-hostnme                                     ## print the hostname running the slurm job 
+hostname                                     ## print the hostname running the slurm job 
