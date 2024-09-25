@@ -3,6 +3,8 @@
 #include <chrono>
 #include <ratio>
 
+#include "scan.h"
+
 using std::cout;
 using std::chrono::duration;
 using std::chrono::high_resolution_clock;
