@@ -8,7 +8,7 @@
 
 cd $SLURM_SUBMIT_DIR
 
-g++ task1.cpp -Wall -O3 -std=c++17 -o task1
+g++ scan.cpp task1.cpp -Wall -O3 -std=c++17 -o task1
 ./task1 1000
 
 
