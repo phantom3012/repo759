@@ -1,7 +1,5 @@
 #include "scan.h"
 
-using namespace std;
-
 void scan(const float *arr, float *output, std::size_t n) {
     output[0] = arr[0];
     for (std::size_t i = 1; i < n; i++) {
