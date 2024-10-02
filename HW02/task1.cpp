@@ -6,42 +6,43 @@
 
 #include "scan.h"
 
-using std::cout;
-using std::chrono::duration;
-using std::chrono::high_resolution_clock;
+using namespace std;
+using chrono::duration;
+using chrono::high_resolution_clock;
 
 int main(int argc, char *argv[]){
 
-    std::size_t n = atoi(argv[1]);
+    size_t n = stoi(argv[1]); //take in command line input for length of array
 
-    std::random_device entropy_source;
-    std::mt19937_64 generator(entropy_source());
-    std::uniform_real_distribution<float> dist(-1.0, 1.0);
+    random_device entropy_source;
+    mt19937_64 generator(entropy_source());
+    uniform_real_distribution<float> dist(-1.0, 1.0);
     
-    float *scanned_arr = (float *)malloc(sizeof(float) * n);
+    float *scanned_arr = (float *)malloc(sizeof(float) * n); //allocate memory for the scanned array
 
+    //declare timer functions
     high_resolution_clock::time_point start;
     high_resolution_clock::time_point end;
     duration<double, std::milli> duration_millisec;
 
-    float arr[n];
-    for (auto& value : arr) {
-        value = dist(generator);
+    float arr[n]; //declare the random array here
+    for (float& value : arr) {
+        value = dist(generator); //populate the array with random values
     }
 
-    start = high_resolution_clock::now();
+    start = high_resolution_clock::now(); //start clock
     scan(arr, scanned_arr, n);
-    end = high_resolution_clock::now();
+    end = high_resolution_clock::now(); //end timing
 
-    duration_millisec = std::chrono::duration_cast<duration<double, std::milli>>(end - start);
+    duration_millisec = chrono::duration_cast<duration<double, std::milli>>(end - start); //get the duration in milliseconds
 
     // print outputs
+    cout << duration_millisec.count() << endl;
+    cout << scanned_arr[0] << endl;
+    cout << scanned_arr[n - 1] << endl;
 
-    cout << duration_millisec.count() << std::endl;
-    cout << scanned_arr[0] << std::endl;
-    cout << scanned_arr[n - 1] << std::endl;
-
-    free(scanned_arr);
+    free(scanned_arr); //delete allocated memory
 
     return 0;
+
 }
