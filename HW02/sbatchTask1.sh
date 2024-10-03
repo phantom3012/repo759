@@ -2,8 +2,9 @@
 
 #SBATCH --partition=instruction             ##Use the instruction partition
 #SBATCH --time=0-00:10:00
-#SBATCH -c 2
+#SBATCH -c 1
 #SBATCH --job-name=HW02_task1
+#SBATCH --ntasks=1
 #SBATCH -o task1.out -e task1.err ## Set the output file and error file
 
 cd $SLURM_SUBMIT_DIR
