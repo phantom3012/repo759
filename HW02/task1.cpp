@@ -37,10 +37,6 @@ int main(int argc, char *argv[]){
     duration_millisec = chrono::duration_cast<duration<double, milli>>(end - start); //get the duration in milliseconds
 
     // print outputs
-    cout << duration_millisec.count() << endl;
-    cout << scanned_arr[0] << endl;
-    cout << scanned_arr[n - 1] << endl;
-
     cout << n << std::endl;
     cout << duration_millisec.count() << std::endl;
     cout << scanned_arr[0] << std::endl;
