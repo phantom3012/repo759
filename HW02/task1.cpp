@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
     //declare timer functions
     high_resolution_clock::time_point start;
     high_resolution_clock::time_point end;
-    duration<double, std::milli> duration_millisec;
+    duration<double, milli> duration_millisec;
 
     float arr[n]; //declare the random array here
     for (float& value : arr) {
@@ -34,14 +34,20 @@ int main(int argc, char *argv[]){
     scan(arr, scanned_arr, n);
     end = high_resolution_clock::now(); //end timing
 
-    duration_millisec = chrono::duration_cast<duration<double, std::milli>>(end - start); //get the duration in milliseconds
+    duration_millisec = chrono::duration_cast<duration<double, milli>>(end - start); //get the duration in milliseconds
 
     // print outputs
     cout << duration_millisec.count() << endl;
     cout << scanned_arr[0] << endl;
     cout << scanned_arr[n - 1] << endl;
 
-    free(scanned_arr); //delete allocated memory
+    cout << n << std::endl;
+    cout << duration_millisec.count() << std::endl;
+    cout << scanned_arr[0] << std::endl;
+    cout << scanned_arr[n - 1] << std::endl;
+    cout << std::endl;
+
+    free(scanned_arr);
 
     return 0;
 
