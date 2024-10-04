@@ -11,6 +11,4 @@ cd $SLURM_SUBMIT_DIR
 
 g++ convolution.cpp task2.cpp -Wall -O3 -std=c++17 -o task2
 
-./task2 50 9
-
-
+./task2 1000 251
