@@ -11,4 +11,4 @@ cd $SLURM_SUBMIT_DIR
 
 g++ matmul.cpp task3.cpp -Wall -O3 -std=c++17 -o task3
 
-/task3
+./task3
