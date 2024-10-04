@@ -8,13 +8,13 @@ using namespace std;
 using chrono::duration;
 using chrono::high_resolution_clock;
 
-const int MIN_SIZE = 1000;
-const int MAX_SIZE = 2000;
-
-const int MIN_VAL = -10;
-const int MAX_VAL = 10;
-
 int main(int argc, char *argv[]){
+
+    const int MIN_SIZE = 1000;
+    const int MAX_SIZE = 2000;
+
+    const int MIN_VAL = -10;
+    const int MAX_VAL = 10;
 
     //declare timimng points
     high_resolution_clock::time_point start_mmul1;
