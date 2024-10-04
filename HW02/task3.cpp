@@ -12,14 +12,9 @@ const int MIN_SIZE = 1000;
 const int MAX_SIZE = 2000;
 
 const int MIN_VAL = -10;
-const int MAX_SIZE = 10;
+const int MAX_VAL = 10;
+
 int main(int argc, char *argv[]){
-
-    const int MIN_SIZE = 1000;
-    const int MAX_SIZE = 2000;
-
-    const int MIN_VAL = -10;
-    const int MAX_VAL = 10;
 
     //declare timimng points
     high_resolution_clock::time_point start_mmul1;
@@ -58,7 +53,7 @@ int main(int argc, char *argv[]){
     vector<double> B_vector(matrixSize);
 
     //populate the matrices with random values and ensure the vectors are the same
-    for (int i = 0; i < matrixSize; i++){
+    for (size_t i = 0; i < matrixSize; i++){
         A[i] = matrixValues(generator);
         B[i] = matrixValues(generator);
         A_vector[i] = A[i];
