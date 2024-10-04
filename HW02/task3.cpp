@@ -86,16 +86,10 @@ int main(int argc, char *argv[]){
     mmul4(A_vector, B_vector, C4, n);
     end_mmul4 = high_resolution_clock::now();
 
-    //get the duration for mmul1 in milliseconds
+    //get the durations of execution
     duration_millisec_mmul1 = chrono::duration_cast<duration<double, milli>>(end_mmul1 - start_mmul1);
-
-    //get the duration for mmul2 in milliseconds
     duration_millisec_mmul2 = chrono::duration_cast<duration<double, milli>>(end_mmul2 - start_mmul2);
-
-    //get the duration for mmul3 in milliseconds
     duration_millisec_mmul3 = chrono::duration_cast<duration<double, milli>>(end_mmul3 - start_mmul3);
-
-    //get the duration for mmul4 in milliseconds
     duration_millisec_mmul4 = chrono::duration_cast<duration<double, milli>>(end_mmul4 - start_mmul4);
 
     //print the durations and the last element of the result matrices
