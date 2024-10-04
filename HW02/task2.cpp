@@ -33,12 +33,12 @@ int main (int argc, char *argv[]){
     uniform_real_distribution<float> image(image_min, image_max);
     uniform_real_distribution<float> mask(mask_min, mask_max);
 
-    float f[n]; //declare the image array here
+    float f[n*n]; //declare the image array here
     for (float& value : f) {
         value = image(generator); //populate the image array with random values
     }
     
-    float w[m]; //declare the mask array here
+    float w[m*m]; //declare the mask array here
     for (float& value : w) {
         value = mask(generator); //populate the image array with random values
     }
@@ -47,7 +47,7 @@ int main (int argc, char *argv[]){
 
     //start timing
     start = high_resolution_clock::now();
-    convolve(f, g, 4, w, 3);
+    convolve(f, g, n, w, m);
     end = high_resolution_clock::now();
 
     duration_millisec = chrono::duration_cast<duration<double, milli>>(end - start); //get the duration in milliseconds
