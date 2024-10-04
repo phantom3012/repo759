@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 #SBATCH --partition=instruction             ##Use the instruction partition
-#SBATCH --time=0-00:10:00
+#SBATCH --time=0-00:03:00
 #SBATCH -c 1
 #SBATCH --job-name=HW02_task1
 #SBATCH --ntasks=1
