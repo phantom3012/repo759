@@ -17,21 +17,21 @@ const int mask_max = 1;
 
 int main (int argc, char *argv[]){
 
-    std::size_t n = atoi(argv[1]); //get image size
-    std::size_t m = atoi(argv[2]); //get mask size
+    size_t n = stoi(argv[1]); //get image size
+    size_t m = stoi(argv[2]); //get mask size
 
-    //declare timer functions
+    //declare timing points
     high_resolution_clock::time_point start;
     high_resolution_clock::time_point end;
-    duration<double, std::milli> duration_millisec;
+    duration<double, milli> duration_millisec;
 
     //declare random number generators with the seed as the entropy source
-    std::random_device entropy_source;
-    std::mt19937 generator(entropy_source());
+    random_device entropy_source;
+    mt19937 generator(entropy_source());
 
     //generate the random distributions for the image and mask
-    std::uniform_real_distribution<float> image(image_min, image_max);
-    std::uniform_int_distribution<float> mask(mask_min, mask_max);
+    uniform_real_distribution<float> image(image_min, image_max);
+    uniform_real_distribution<float> mask(mask_min, mask_max);
 
     float f[n]; //declare the image array here
     for (float& value : f) {
@@ -45,16 +45,19 @@ int main (int argc, char *argv[]){
 
     float *g = (float *)malloc(sizeof(float) * n * n); //allocate memory for the convolved image
 
+    //start timing
     start = high_resolution_clock::now();
     convolve(f, g, 4, w, 3);
     end = high_resolution_clock::now();
 
-    duration_millisec = chrono::duration_cast<duration<double, std::milli>>(end - start); //get the duration in milliseconds
+    duration_millisec = chrono::duration_cast<duration<double, milli>>(end - start); //get the duration in milliseconds
 
     //print outputs
     cout << duration_millisec.count() << endl;
     cout << g[0] << endl;
     cout << g[n - 1] << endl;
+
+    free(g);
 
     return 0;
 }
