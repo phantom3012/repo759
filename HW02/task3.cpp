@@ -8,6 +8,11 @@ using namespace std;
 using chrono::duration;
 using chrono::high_resolution_clock;
 
+const int MIN_SIZE = 1000;
+const int MAX_SIZE = 2000;
+
+const int MIN_VAL = -10;
+const int MAX_SIZE = 10;
 int main(int argc, char *argv[]){
 
     const int MIN_SIZE = 1000;
@@ -37,7 +42,7 @@ int main(int argc, char *argv[]){
 
     //generate the random distribution for the matrices
     uniform_int_distribution<int> matrixLength(MIN_SIZE,MAX_SIZE);
-    uniform_int_distribution<double> matrixValues(MIN_VAL,MAX_VAL);
+    uniform_real_distribution<double> matrixValues(MIN_VAL,MAX_VAL);
 
     size_t n = matrixLength(generator);
     size_t matrixSize = n*n;
