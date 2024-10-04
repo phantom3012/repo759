@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
     size_t n = matrixLength(generator);
     size_t matrixSize = n*n;
 
-    cout<<matrixSize<<endl;
+    cout<<matrixLength<<endl;
 
     //create random matrices for multiplication operands
     double A[matrixSize];
