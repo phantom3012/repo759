@@ -1,0 +1,139 @@
+\documentclass[12pt]{article}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={HW01},
+    pdfpagemode=FullScreen,
+    }
+\lstset{basicstyle=\ttfamily,
+showstringspaces=false,
+commentstyle=\color{red},
+keywordstyle=\color{blue}
+}
+
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+
+\title{Programming Assignment 1 \\ \small{ECE 759, Prof. TW Huang}}
+\author{Sai Tadinada}
+\date{}
+
+\begin{document}
+\maketitle
+
+GitHub link to programming tasks (Question 4,Question 6): \\ \url{https://github.com/phantom3012/repo759/tree/main/HW01}
+
+\section{Question 1}
+I went through a) through c) and understood how to time code, how to submit my assignments with git, and what the recommended workflow is when it comes to working on my assignment.
+
+\section{Question 2}
+
+\subsection{}
+
+\begin{lstlisting}[language=bash]
+    $ cd somedir    
+\end{lstlisting}
+
+\subsection{}
+\begin{lstlisting}[language=bash]
+    $ cat sometext.txt
+\end{lstlisting}
+
+\subsection{}
+\begin{lstlisting}[language=bash]
+    $ tail -5 sometext.txt    
+\end{lstlisting}
+
+\pagebreak
+
+\subsection{bash script}
+\begin{lstlisting}[language=bash]
+    #!/bin/bash
+    for file in *.txt do
+        [-f $file] || continue
+        tail n -5 $file
+        echo
+    done
+\end{lstlisting}
+
+\subsection{bash script}
+\begin{lstlisting}[language=bash]
+    #!/bin/bash
+    for i in {0..6}; do
+        echo $i
+    done
+    
+\end{lstlisting}
+
+\section{Question 3}
+\subsection{}
+No modules loaded after login
+
+\subsection{}
+Available GCC version without loading any modules: (GCC) 14.1.1 20240522 (Red Hat 14.1.1-4).
+
+(Command run: \lstinline[language=bash]|gcc --version| )
+
+\pagebreak
+\subsection{}
+List of cuda modules available at the path relative to \lstinline[language=bash]|/opt/apps/lmod/modulefiles/|
+\begin{itemize}
+    \item \lstinline[language=bash]|nvidia/cuda/10.2.2|
+    \item \lstinline[language=bash]|nvidia/cuda/11.0.3|
+    \item \lstinline[language=bash]|nvidia/cuda/11.3.1|
+    \item \lstinline[language=bash]|nvidia/cuda/11.6.0|
+    \item \lstinline[language=bash]|nvidia/cuda/11.8.0|
+    \item \lstinline[language=bash]|nvidia/cuda/12.0.0|
+    \item \lstinline[language=bash]|nvidia/cuda/12.1.0|
+    \item \lstinline[language=bash]|nvidia/cuda/12.2.0|
+    \item \lstinline[language=bash]|nvidia/cuda/12.5.0 (D)|
+    \item \lstinline[language=bash]|gromacs/cuda-12.2-mpich/2023.3|
+    \item \lstinline[language=bash]|gromacs/cuda-12.2/2023.3|
+    \item \lstinline[language=bash]|nvidia/nvhpc-hpcx-cuda11/24.5|
+    \item \lstinline[language=bash]|nvidia/nvhpc-hpcx-cuda12/24.5 (D)|
+\end{itemize}
+List obtained using the command: \lstinline[language=bash]|module avail cuda|
+
+\subsection{}
+MATLAB is another software that has modules available on Euler. MATLAB is a scripting software mainly used for academic purposes like data plotting and analysis or modelling.
+
+\section{Question 4}
+Please see: \\ \url{https://github.com/phantom3012/repo759/blob/main/HW01/task4.sh}
+\pagebreak
+
+\section{Question 5}
+
+\subsection{}
+SLURM on Euler begins execution in the home directory.
+
+\subsection{}
+\lstinline[language=bash]|$SLURM_JOB_ID| is the unique job identifier given to the submitted job by SLURM.
+
+\subsection{}
+To track the job status started by myself, I can use the command \\ \lstinline[language=bash]|squeue --me|
+
+\subsection{}
+To cancel a job in queue, we can use the \lstinline[language=bash]|scancel| command.To run this command, the syntax is: \\
+\lstinline[language=bash]|$ scancel --me| \\
+
+\subsection{}
+The line \lstinline[language=bash]|#SBATCH --gres=gpu:1| Requests one generic resource gpu
+
+\subsection{}
+The line \lstinline[language=bash]|#SBATCH --array=0-9| allows a user to submit an array of 10 jobs with identical parameters
+
+
+\section{Question 6}
+Please see \url{https://github.com/phantom3012/repo759/blob/main/HW01/task6.cpp}
+
+
+
+
+\end{document}
+
