@@ -58,6 +58,7 @@ int main(int argc, char *argv[]){
     cout << C1[0] << endl;
     cout << C1[matrixSize - 1] << endl;
     cout << duration_millisec_mmul.count() << endl;
+    cout << endl;
 
     //free the memory allocated for the result matrices
     free(C1);
