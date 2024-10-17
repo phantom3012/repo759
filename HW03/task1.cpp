@@ -44,11 +44,11 @@ int main(int argc, char *argv[]){
     }
 
     //allocate space for the result matrix
-    float *C1 = (float *)malloc(sizeof(double) * matrixSize);
+    float *C1 = (float *)malloc(sizeof(float) * matrixSize);
 
     //start timing for mmul1
     start_mmul = high_resolution_clock::now();
-    #pragma omp num_threads(t)
+    #pragma omp parallel num_threads(t)
     mmul(A, B, C1, n);
     end_mmul = high_resolution_clock::now();
 
