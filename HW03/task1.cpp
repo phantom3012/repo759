@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
 
     //start timing for mmul1
     start_mmul = high_resolution_clock::now();
-    #pragma omp_set_num_threads(t)
+    omp_set_num_threads(t);
     mmul(A, B, C1, n);
     end_mmul = high_resolution_clock::now();
 
