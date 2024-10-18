@@ -41,7 +41,7 @@ int main(int argc, char *argv[]){
     }
 
     cout << "Initial array: ";
-    for(int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         cout << A[i] << "\n";
     }
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]){
     duration_millisec_msort = chrono::duration_cast<duration<double, milli>>(end_msort - start_msort);
     //print the durations and the last element of the result matrices
     cout << "\nSorted array: ";
-    for(int i = 0; i < n; i++){
+    for(size_t i = 0; i < n; i++){
         cout << A[i] << "\n";
     }
 
