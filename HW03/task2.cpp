@@ -20,7 +20,7 @@ int main (int argc, char *argv[]){
     size_t n = stoi(argv[1]); //get image size
     int t = stoi(argv[2]); //get number of threads
 
-    const size_t m = 51; //set mask size
+    const size_t m = 3; //set mask size
     //declare timing points
     high_resolution_clock::time_point start;
     high_resolution_clock::time_point end;
