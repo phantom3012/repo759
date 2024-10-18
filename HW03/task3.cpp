@@ -35,14 +35,8 @@ int main(int argc, char *argv[]){
     int A[n];
 
     //populate the matrices with random values
-    #pragma omp parallel for
     for (size_t i = 0; i < n; i++){
         A[i] = arrayValues(generator);
-    }
-
-    cout << "Initial array: ";
-    for(size_t i = 0; i < n; i++){
-        cout << A[i] << "\n";
     }
 
     //start timing for mmul1
