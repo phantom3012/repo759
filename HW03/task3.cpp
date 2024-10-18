@@ -53,13 +53,9 @@ int main(int argc, char *argv[]){
 
     //get the durations of execution
     duration_millisec_msort = chrono::duration_cast<duration<double, milli>>(end_msort - start_msort);
-    //print the durations and the last element of the result matrices
-    cout << "\nSorted array: ";
-    for(size_t i = 0; i < n; i++){
-        cout << A[i] << "\n";
-    }
-
-    cout << "\nTime taken: ";
+    //print the required outputs
+    cout << A[0] << "\n";
+    cout << A[n-1] << "\n";
     cout << duration_millisec_msort.count() << endl;
 
     return 0;
