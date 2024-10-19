@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
     //print the required outputs
     cout << A[0] << "\n";
     cout << A[n-1] << "\n";
-    cout << duration_millisec_msort.count() << endl;
+    cout << duration_millisec_msort.count() << endl <<"\n";
 
     return 0;
 }
