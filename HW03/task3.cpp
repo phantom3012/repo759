@@ -40,8 +40,8 @@ int main(int argc, char *argv[]){
     }
 
     //start timing for mmul1
-    start_msort = high_resolution_clock::now();
     omp_set_num_threads(t);
+    start_msort = high_resolution_clock::now();
     msort(A, n, ts);
     end_msort = high_resolution_clock::now();
 
