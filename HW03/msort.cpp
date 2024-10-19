@@ -51,6 +51,7 @@ void mergeSortParallel(int* arr, std::size_t left, std::size_t right, std::size_
                     #pragma omp task
                     mergeSortParallel(arr, mid + 1, right, threshold);
                 }
+                #pragma omp taskwait
                 // #pragma omp section
                 // mergeSortParallel(arr, left, mid, threshold);
                 // #pragma omp section
