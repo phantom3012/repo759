@@ -6,37 +6,39 @@ void sortSerial(int* arr, const std::size_t n) {
     std::sort(arr, arr + n);
 }
 
-void merge(int* arr, int *left, int sizeLeft, int *right, int sizeRight) {
-    int i = 0, j = 0, k = 0;
-    while (i<sizeLeft && j<sizeRight) {
-        if (left[i] <= right[j]){
+void merge(int* arr, int *left, std::size_t sizeLeft, int *right, std::size_t sizeRight) {
+    std::size_t i = 0, j = 0, k = 0;
+
+    #pragma omp parallel for
+    for (; i < sizeLeft && j < sizeRight; ) {
+        if (left[i] <= right[j]) {
             arr[k] = left[i];
             i++;
-            k++;
         } else {
             arr[k] = right[j];
             j++;
-            k++;
         }
+        k++;
     }
-    while(i<sizeLeft) {
+
+    #pragma omp parallel for
+    for(; i < sizeLeft; i++) {
         arr[k] = left[i];
-        i++;
         k++;
     }
-    while(j<sizeRight) {
+    #pragma omp parallel for
+    for(; j < sizeRight; j++) {
         arr[k] = right[j];
-        j++;
         k++;
     }
-    
+   
 }
 
-void mergeSortParallel(int* arr, int left, int right, std::size_t threshold) {
+void mergeSortParallel(int* arr, std::size_t left, std::size_t right, std::size_t threshold) {
     if (left >= right) {
         return;
     }
-    int mid = left + (right - left) / 2;
+    std::size_t mid = left + (right - left) / 2;
  
         if (right-left+1 <= threshold) {
             sortSerial(arr, sizeof(arr));
@@ -50,18 +52,20 @@ void mergeSortParallel(int* arr, int left, int right, std::size_t threshold) {
             }
         }
 
-    int leftSize = mid - left + 1;
-    int rightSize = right - mid;
+    std::size_t leftSize = mid - left + 1;
+    std::size_t rightSize = right - mid;
     int leftArr[leftSize];
     int rightArr[rightSize];
+
     #pragma omp parallel for
-    for (int i = 0; i < leftSize; i++) {
+    for (std::size_t i = 0; i < leftSize; i++) {
         leftArr[i] = arr[left + i];
     }
     #pragma omp parallel for
-    for (int i = 0; i < rightSize; i++) {
+    for (std::size_t i = 0; i < rightSize; i++) {
         rightArr[i] = arr[mid + 1 + i];
     }
+    
     #pragma omp task
     merge(arr + left, leftArr, leftSize, rightArr, rightSize);
     #pragma omp taskwait
