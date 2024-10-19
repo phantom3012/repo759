@@ -65,7 +65,6 @@ void mergeSortParallel(int* arr, std::size_t left, std::size_t right, std::size_
         rightArr[i] = arr[mid + 1 + i];
     }
 
-//    #pragma omp task
     merge(arr + left, leftArr, leftSize, rightArr, rightSize);
 
 }
