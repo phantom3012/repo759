@@ -9,26 +9,25 @@ void sortSerial(int* arr, const std::size_t n) {
 void merge(int* arr, int *left, std::size_t sizeLeft, int *right, std::size_t sizeRight) {
     std::size_t i = 0, j = 0, k = 0;
 
-    #pragma omp parallel for
-    for (; i < sizeLeft && j < sizeRight; ) {
-        if (left[i] <= right[j]) {
+   while (i<sizeLeft && j<sizeRight) {
+        if (left[i] <= right[j]){
             arr[k] = left[i];
             i++;
+            k++;
         } else {
             arr[k] = right[j];
             j++;
+            k++;
         }
-        k++;
     }
-
-    #pragma omp parallel for
-    for(; i < sizeLeft; i++) {
+    while(i<sizeLeft) {
         arr[k] = left[i];
+        i++;
         k++;
     }
-    #pragma omp parallel for
-    for(; j < sizeRight; j++) {
+    while(j<sizeRight) {
         arr[k] = right[j];
+        j++;
         k++;
     }
    
@@ -65,7 +64,7 @@ void mergeSortParallel(int* arr, std::size_t left, std::size_t right, std::size_
     for (std::size_t i = 0; i < rightSize; i++) {
         rightArr[i] = arr[mid + 1 + i];
     }
-    
+
     #pragma omp task
     merge(arr + left, leftArr, leftSize, rightArr, rightSize);
     #pragma omp taskwait
