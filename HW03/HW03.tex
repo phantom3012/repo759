@@ -1,0 +1,87 @@
+\documentclass[12pt]{article}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{pdfpages}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={HW02},
+    pdfpagemode=FullScreen,
+    }
+\lstset{basicstyle=\ttfamily,
+showstringspaces=false,
+commentstyle=\color{red},
+keywordstyle=\color{blue}
+}
+
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+
+\title{Programming Assignment 2 \\ \small{ECE 759, Prof. TW Huang}}
+\author{Sai Tadinada}
+\date{}
+
+\begin{document}
+\maketitle
+
+GitHub link to programming tasks: \\ \url{https://github.com/phantom3012/repo759/tree/main/HW03}
+
+\section{Question 1}
+\subsection{}
+matmul.cpp can be found at \url{https://github.com/phantom3012/repo759/blob/main/HW03/matmul.cpp}
+
+\subsection{}
+task1.cpp can be found at \url{https://github.com/phantom3012/repo759/blob/main/HW03/task1.cpp}
+
+\subsection{}
+Scaling analysis reveals an exponential decrease in time. See Figure \ref{fig:threads_change_task1}
+\begin{figure}[ht]
+    \includegraphics[width = \textwidth]{task1.pdf}
+    \caption{Time taken for matrix multiplication with varying number of threads}
+    \label{fig:threads_change_task1}
+\end{figure}
+\newpage
+
+\section{Question 2}
+
+\subsection{}
+convolution.cpp can be found at \url{https://github.com/phantom3012/repo759/blob/main/HW03/convolution.cpp}
+\subsection{}
+task2.cpp can be found at \url{https://github.com/phantom3012/repo759/blob/main/HW03/task2.cpp}
+\subsection{}
+Scaling analysis reveals an exponential decrease in time. See Figure \ref{fig:threads_change_task1}
+\begin{figure}[ht]
+    \includegraphics[width = \textwidth]{task2.pdf}
+    \caption{Time taken for matrix multiplication with varying number of threads}
+    \label{fig:threads_change_task2}
+\end{figure}
+\\The time taken after a certain number of threds essentially remains the same because of other bottleneck factors like memory access time, etc.
+
+\section{Question 3}
+\subsection{}
+msort.cpp can be found at \url{https://github.com/phantom3012/repo759/blob/main/HW03/msort.cpp}
+\subsection{}
+task3.cpp can be found at \url{https://github.com/phantom3012/repo759/blob/main/HW03/task3.cpp}
+\newpage
+\subsection{}
+\subsubsection{}
+\begin{figure}[ht]
+    \includegraphics[width = \textwidth]{task3_ts.pdf}
+    \caption{Time vs threshold size ts for 8 threads}
+    \label{fig:ts_change_task3}
+\end{figure}
+\clearpage
+\subsubsection{}
+\begin{figure}[ht]
+    \includegraphics[width = \textwidth]{task3_t.pdf}
+    \caption{Time vs threads for ts = 256}
+    \label{fig:t_change_task3}
+\end{figure}
+
+
+\end{document}
+
