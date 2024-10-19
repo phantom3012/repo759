@@ -37,21 +37,18 @@ void mergeSortParallel(int* arr, int left, int right, std::size_t threshold) {
         return;
     }
     int mid = left + (right - left) / 2;
-    #pragma omp task
+    #pragma omp parallel sections
     {
-        if (sizeof(arr) <= threshold) {
+        if (right-left+1 <= threshold) {
             sortSerial(arr, sizeof(arr));
+        } else {
+            #pragma omp section
+            mergeSortParallel(arr, left, mid, threshold);
+            #pragma omp section
+            mergeSortParallel(arr, mid + 1, right, threshold);
         }
-        mergeSortParallel(arr, left, mid, threshold);
     }
-    #pragma omp task
-    {
-        if (sizeof(arr) <= threshold) {
-            sortSerial(arr, sizeof(arr));
-        }
-        mergeSortParallel(arr, mid + 1, right, threshold);
-    }
-    #pragma omp taskwait
+    
     int leftSize = mid - left + 1;
     int rightSize = right - mid;
     int leftArr[leftSize];
