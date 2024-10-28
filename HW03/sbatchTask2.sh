@@ -12,5 +12,5 @@ cd $SLURM_SUBMIT_DIR
 g++ task2.cpp convolution.cpp -Wall -O3 -std=c++17 -o task2 -fopenmp
 
 for ((i = 1; i <= 20; i++)); do
-    ./task1 1024 $((i));
+    ./task2 1024 $((i));
 done
