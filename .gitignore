@@ -8,3 +8,5 @@
 !*.pdf
 !*.h
 !*.tex
+!HW04/*.py
+!HW04/*.png
