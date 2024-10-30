@@ -107,7 +107,6 @@ int main(int argc, char *argv[]) {
     // Simulation parameters
     double t = 0.0;
     omp_set_num_threads(num_threads);
-    std::cout << "Number of threads in use: " << omp_get_num_threads() << std::endl;
 
     // Set initial masses and random positions/velocities
     
@@ -156,6 +155,7 @@ int main(int argc, char *argv[]) {
     // Main simulation loop
     #pragma omp parallel for schedule(static)
     for (int step = 0; step < Nt; step++) {
+        std::cout << "Number of threads in use: " << omp_get_num_threads() << std::endl;
         
         // TODO: (1/2) kick
         #pragma omp parallel for schedule(static)
