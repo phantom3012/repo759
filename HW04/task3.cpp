@@ -21,26 +21,30 @@ const double board_size = 4.0; // Size of the board
 void getAcc(const double pos[][3], const double mass[], double acc[][3], int N) {
 
     // TODO:
-    #pragma omp parallel for nowait
-    for (int i = 0; i < N; i++) {
-        acc[i][0] = 0.0;
-        acc[i][1] = 0.0;
-        acc[i][2] = 0.0;
-        for (int j = 0; j < N; j++) {
-            if (i != j) {
-                double dx = pos[j][0] - pos[i][0];
-                double dy = pos[j][1] - pos[i][1];
-                double dz = pos[j][2] - pos[i][2];
-                double r2 = dx * dx + dy * dy + dz * dz + softening * softening;
-                double inv_r = 1.0 / sqrt(r2);
-                double inv_r3 = inv_r * inv_r * inv_r;
-                acc[i][0] += G * mass[j] * dx * inv_r3;
-                acc[i][1] += G * mass[j] * dy * inv_r3;
-                acc[i][2] += G * mass[j] * dz * inv_r3;
+    #pragma omp parallel
+    {
+        #pragma omp parallel for nowait
+        for (int i = 0; i < N; i++) {
+            acc[i][0] = 0.0;
+            acc[i][1] = 0.0;
+            acc[i][2] = 0.0;
+            #pragma omp parallel for nowait
+            for (int j = 0; j < N; j++) {
+                if (i != j) {
+                    double dx = pos[j][0] - pos[i][0];
+                    double dy = pos[j][1] - pos[i][1];
+                    double dz = pos[j][2] - pos[i][2];
+                    double r2 = dx * dx + dy * dy + dz * dz + softening * softening;
+                    double inv_r = 1.0 / sqrt(r2);
+                    double inv_r3 = inv_r * inv_r * inv_r;
+                    acc[i][0] += G * mass[j] * dx * inv_r3;
+                    acc[i][1] += G * mass[j] * dy * inv_r3;
+                    acc[i][2] += G * mass[j] * dz * inv_r3;
+                }
             }
         }
+    
     }
-
 
 }
 
@@ -109,41 +113,49 @@ int main(int argc, char *argv[]) {
     omp_set_num_threads(num_threads);
 
     // Set initial masses and random positions/velocities
-    #pragma omp parallel for nowait
-    for (int i = 0; i < N; i++) {
-        mass[i] = uniform_dist(generator);
+    #pragma omp parallel
+    {
+        #pragma omp parallel for nowait
+        for (int i = 0; i < N; i++) {
+            mass[i] = uniform_dist(generator);
 
-        pos[i][0] = normal_dist(generator);
-        pos[i][1] = normal_dist(generator);
-        pos[i][2] = normal_dist(generator);
+            pos[i][0] = normal_dist(generator);
+            pos[i][1] = normal_dist(generator);
+            pos[i][2] = normal_dist(generator);
 
-        vel[i][0] = normal_dist(generator);
-        vel[i][1] = normal_dist(generator);
-        vel[i][2] = normal_dist(generator);
+            vel[i][0] = normal_dist(generator);
+            vel[i][1] = normal_dist(generator);
+            vel[i][2] = normal_dist(generator);
+        }
     }
 
     // Convert to Center-of-Mass frame
     double velCM[3] = {0.0, 0.0, 0.0};
     double totalMass = 0.0;
-    #pragma omp parallel for nowait
-    for (int i = 0; i < N; i++) {
-        velCM[0] += vel[i][0] * mass[i];
-        velCM[1] += vel[i][1] * mass[i];
-        velCM[2] += vel[i][2] * mass[i];
-        totalMass += mass[i];
+    #pragma omp parallel
+    {
+        #pragma omp parallel for nowait
+        for (int i = 0; i < N; i++) {
+            velCM[0] += vel[i][0] * mass[i];
+            velCM[1] += vel[i][1] * mass[i];
+            velCM[2] += vel[i][2] * mass[i];
+            totalMass += mass[i];
+        }
     }
 
     velCM[0] /= totalMass;
     velCM[1] /= totalMass;
     velCM[2] /= totalMass;
 
-    #pragma omp parallel for nowait
-    for (int i = 0; i < N; i++) {
-        vel[i][0] -= velCM[0];
-        vel[i][1] -= velCM[1];
-        vel[i][2] -= velCM[2];
+    #pragma omp parallel
+    {
+        #pragma omp parallel for nowait
+        for (int i = 0; i < N; i++) {
+            vel[i][0] -= velCM[0];
+            vel[i][1] -= velCM[1];
+            vel[i][2] -= velCM[2];
+        }
     }
-
     // Initial accelerations
     getAcc(pos, mass, acc, N);
 
@@ -151,71 +163,75 @@ int main(int argc, char *argv[]) {
     int Nt = int(tEnd / dt);
 
     // Main simulation loop
-    #pragma omp parallel for nowait
-    for (int step = 0; step < Nt; step++) {
+    #pragma omp parallel
+    {
+        #pragma omp parallel for nowait
+        for (int step = 0; step < Nt; step++) {
+            
+            // TODO: (1/2) kick
+            #pragma omp parallel for nowait
+            for (int i = 0; i < N; i++) {
+                vel[i][0] += acc[i][0] * dt / 2.0;
+                vel[i][1] += acc[i][1] * dt / 2.0;
+                vel[i][2] += acc[i][2] * dt / 2.0;
+            }
+
+            // TODO: Drift
+            #pragma omp parallel for nowait
+            for (int i = 0; i < N; i++) {
+                pos[i][0] += vel[i][0] * dt;
+                pos[i][1] += vel[i][1] * dt;
+                pos[i][2] += vel[i][2] * dt;
+            }
         
-        // TODO: (1/2) kick
-        #pragma omp parallel for
-        for (int i = 0; i < N; i++) {
-            vel[i][0] += acc[i][0] * dt / 2.0;
-            vel[i][1] += acc[i][1] * dt / 2.0;
-            vel[i][2] += acc[i][2] * dt / 2.0;
-        }
 
-        // TODO: Drift
-        #pragma omp parallel for
-        for (int i = 0; i < N; i++) {
-            pos[i][0] += vel[i][0] * dt;
-            pos[i][1] += vel[i][1] * dt;
-            pos[i][2] += vel[i][2] * dt;
-        }
-      
+            // TODO: Ensure particles stay within the board limits
+            #pragma omp parallel for nowait
+            for (int i = 0; i < N; i++) {
+                if (pos[i][0] < -board_size) {
+                    pos[i][0] = -board_size;
+                    vel[i][0] = -vel[i][0];
+                } else if (pos[i][0] > board_size) {
+                    pos[i][0] = board_size;
+                    vel[i][0] = -vel[i][0];
+                }
 
-        // TODO: Ensure particles stay within the board limits
-        #pragma omp parallel for nowait
-        for (int i = 0; i < N; i++) {
-            if (pos[i][0] < -board_size) {
-                pos[i][0] = -board_size;
-                vel[i][0] = -vel[i][0];
-            } else if (pos[i][0] > board_size) {
-                pos[i][0] = board_size;
-                vel[i][0] = -vel[i][0];
+                if (pos[i][1] < -board_size) {
+                    pos[i][1] = -board_size;
+                    vel[i][1] = -vel[i][1];
+                } else if (pos[i][1] > board_size) {
+                    pos[i][1] = board_size;
+                    vel[i][1] = -vel[i][1];
+                }
+
+                if (pos[i][2] < -board_size) {
+                    pos[i][2] = -board_size;
+                    vel[i][2] = -vel[i][2];
+                } else if (pos[i][2] > board_size) {
+                    pos[i][2] = board_size;
+                    vel[i][2] = -vel[i][2];
+                }
             }
 
-            if (pos[i][1] < -board_size) {
-                pos[i][1] = -board_size;
-                vel[i][1] = -vel[i][1];
-            } else if (pos[i][1] > board_size) {
-                pos[i][1] = board_size;
-                vel[i][1] = -vel[i][1];
+
+            // Update accelerations
+            getAcc(pos, mass, acc, N);
+
+            // TODO: (1/2) kick
+            #pragma omp parallel for nowait
+            for (int i = 0; i < N; i++) {
+                vel[i][0] += acc[i][0] * dt / 2.0;
+                vel[i][1] += acc[i][1] * dt / 2.0;
+                vel[i][2] += acc[i][2] * dt / 2.0;
             }
 
-            if (pos[i][2] < -board_size) {
-                pos[i][2] = -board_size;
-                vel[i][2] = -vel[i][2];
-            } else if (pos[i][2] > board_size) {
-                pos[i][2] = board_size;
-                vel[i][2] = -vel[i][2];
-            }
+            // Update time
+            t += dt;
+
+            // For debug: save positions to CSV at each step
+            savePositionsToCSV(pos, N, step, filename);
         }
-
-
-        // Update accelerations
-        getAcc(pos, mass, acc, N);
-
-        // TODO: (1/2) kick
-        #pragma omp parallel for nowait
-        for (int i = 0; i < N; i++) {
-            vel[i][0] += acc[i][0] * dt / 2.0;
-            vel[i][1] += acc[i][1] * dt / 2.0;
-            vel[i][2] += acc[i][2] * dt / 2.0;
-        }
-
-        // Update time
-        t += dt;
-
-        // For debug: save positions to CSV at each step
-        savePositionsToCSV(pos, N, step, filename);
+        
     }
 
     // Clean up dynamically allocated memory
