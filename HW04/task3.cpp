@@ -21,6 +21,7 @@ const double board_size = 4.0; // Size of the board
 void getAcc(const double pos[][3], const double mass[], double acc[][3], int N) {
 
     // TODO:
+    #pragma omp parallel for nowait
     for (int i = 0; i < N; i++) {
         acc[i][0] = 0.0;
         acc[i][1] = 0.0;
@@ -108,7 +109,7 @@ int main(int argc, char *argv[]) {
     omp_set_num_threads(num_threads);
 
     // Set initial masses and random positions/velocities
-    #pragma omp parallel for
+    #pragma omp parallel for nowait
     for (int i = 0; i < N; i++) {
         mass[i] = uniform_dist(generator);
 
@@ -124,7 +125,7 @@ int main(int argc, char *argv[]) {
     // Convert to Center-of-Mass frame
     double velCM[3] = {0.0, 0.0, 0.0};
     double totalMass = 0.0;
-    #pragma omp parallel for
+    #pragma omp parallel for nowait
     for (int i = 0; i < N; i++) {
         velCM[0] += vel[i][0] * mass[i];
         velCM[1] += vel[i][1] * mass[i];
@@ -136,7 +137,7 @@ int main(int argc, char *argv[]) {
     velCM[1] /= totalMass;
     velCM[2] /= totalMass;
 
-    #pragma omp parallel for
+    #pragma omp parallel for nowait
     for (int i = 0; i < N; i++) {
         vel[i][0] -= velCM[0];
         vel[i][1] -= velCM[1];
@@ -150,7 +151,7 @@ int main(int argc, char *argv[]) {
     int Nt = int(tEnd / dt);
 
     // Main simulation loop
-    #pragma omp parallel for
+    #pragma omp parallel for nowait
     for (int step = 0; step < Nt; step++) {
         
         // TODO: (1/2) kick
@@ -171,7 +172,7 @@ int main(int argc, char *argv[]) {
       
 
         // TODO: Ensure particles stay within the board limits
-        #pragma omp parallel for
+        #pragma omp parallel for nowait
         for (int i = 0; i < N; i++) {
             if (pos[i][0] < -board_size) {
                 pos[i][0] = -board_size;
@@ -203,7 +204,7 @@ int main(int argc, char *argv[]) {
         getAcc(pos, mass, acc, N);
 
         // TODO: (1/2) kick
-        #pragma omp parallel for
+        #pragma omp parallel for nowait
         for (int i = 0; i < N; i++) {
             vel[i][0] += acc[i][0] * dt / 2.0;
             vel[i][1] += acc[i][1] * dt / 2.0;
