@@ -147,33 +147,45 @@ int main(int argc, char *argv[]) {
     for (int step = 0; step < Nt; step++) {
         
         // TODO: (1/2) kick
-        vel[step][0] += acc[step][0] * dt / 2.0;
-        vel[step][1] += acc[step][1] * dt / 2.0;
-        vel[step][2] += acc[step][2] * dt / 2.0;
+        for (int i = 0; i < N; i++) {
+            vel[i][0] += acc[i][0] * dt / 2.0;
+            vel[i][1] += acc[i][1] * dt / 2.0;
+            vel[i][2] += acc[i][2] * dt / 2.0;
+        }
 
         // TODO: Drift
-        pos[step][0] += vel[step][0] * dt;
-        pos[step][1] += vel[step][1] * dt;
-        pos[step][2] += vel[step][2] * dt;
+        for (int i = 0; i < N; i++) {
+            pos[i][0] += vel[i][0] * dt;
+            pos[i][1] += vel[i][1] * dt;
+            pos[i][2] += vel[i][2] * dt;
+        }
       
 
         // TODO: Ensure particles stay within the board limits
-        if (pos[step][0] > board_size) {
-            pos[step][0] = board_size;
-        } else if (pos[step][0] < -board_size) {
-            pos[step][0] = -board_size;
-        }
+        for (int i = 0; i < N; i++) {
+            if (pos[i][0] < -board_size) {
+                pos[i][0] = -board_size;
+                vel[i][0] = -vel[i][0];
+            } else if (pos[i][0] > board_size) {
+                pos[i][0] = board_size;
+                vel[i][0] = -vel[i][0];
+            }
 
-        if(pos[step][1] > board_size) {
-            pos[step][1] = board_size;
-        } else if (pos[step][1] < -board_size) {
-            pos[step][1] = -board_size;
-        }
+            if (pos[i][1] < -board_size) {
+                pos[i][1] = -board_size;
+                vel[i][1] = -vel[i][1];
+            } else if (pos[i][1] > board_size) {
+                pos[i][1] = board_size;
+                vel[i][1] = -vel[i][1];
+            }
 
-        if (pos[step][2] > board_size) {
-            pos[step][2] = board_size;
-        } else if (pos[step][2] < -board_size) {
-            pos[step][2] = -board_size;
+            if (pos[i][2] < -board_size) {
+                pos[i][2] = -board_size;
+                vel[i][2] = -vel[i][2];
+            } else if (pos[i][2] > board_size) {
+                pos[i][2] = board_size;
+                vel[i][2] = -vel[i][2];
+            }
         }
 
 
@@ -181,9 +193,11 @@ int main(int argc, char *argv[]) {
         getAcc(pos, mass, acc, N);
 
         // TODO: (1/2) kick
-        vel[step][0] += acc[step][0] * dt / 2.0;
-        vel[step][1] += acc[step][1] * dt / 2.0;
-        vel[step][2] += acc[step][2] * dt / 2.0;
+        for (int i = 0; i < N; i++) {
+            vel[i][0] += acc[i][0] * dt / 2.0;
+            vel[i][1] += acc[i][1] * dt / 2.0;
+            vel[i][2] += acc[i][2] * dt / 2.0;
+        }
 
         // Update time
         t += dt;
