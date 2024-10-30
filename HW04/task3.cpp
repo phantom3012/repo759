@@ -228,6 +228,8 @@ int main(int argc, char *argv[]) {
             // Update time
             t += dt;
 
+            #pragma omp barrier
+
             // For debug: save positions to CSV at each step
             savePositionsToCSV(pos, N, step, filename);
         }
