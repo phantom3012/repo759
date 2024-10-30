@@ -107,6 +107,7 @@ int main(int argc, char *argv[]) {
     // Simulation parameters
     double t = 0.0;
     omp_set_num_threads(num_threads);
+    std::cout << "Number of threads in use: " << omp_get_num_threads() << std::endl;
 
     // Set initial masses and random positions/velocities
     
@@ -229,7 +230,6 @@ int main(int argc, char *argv[]) {
 
     end = high_resolution_clock::now();
     duration_sec = std::chrono::duration_cast<duration<double, std::milli> >(end - start);
-    std::cout << "Number of threads used: " << omp_get_num_threads() << std::endl;
     std::cout << "time: " << duration_sec.count() << "ms\n";
 
     return 0;
