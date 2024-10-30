@@ -147,9 +147,9 @@ int main(int argc, char *argv[]) {
     for (int step = 0; step < Nt; step++) {
         
         // TODO: (1/2) kick
-        vel[step][0] += 0.5 * acc[step][0] * dt;
-        vel[step][1] += 0.5 * acc[step][1] * dt;
-        vel[step][2] += 0.5 * acc[step][2] * dt;
+        vel[step][0] += acc[step][0] * dt / 2.0;
+        vel[step][1] += acc[step][1] * dt / 2.0;
+        vel[step][2] += acc[step][2] * dt / 2.0;
 
         // TODO: Drift
         pos[step][0] += vel[step][0] * dt;
@@ -181,9 +181,9 @@ int main(int argc, char *argv[]) {
         getAcc(pos, mass, acc, N);
 
         // TODO: (1/2) kick
-        vel[step][0] += 0.5 * acc[step][0] * dt;
-        vel[step][1] += 0.5 * acc[step][1] * dt;
-        vel[step][2] += 0.5 * acc[step][2] * dt;
+        vel[step][0] += acc[step][0] * dt / 2.0;
+        vel[step][1] += acc[step][1] * dt / 2.0;
+        vel[step][2] += acc[step][2] * dt / 2.0;
 
         // Update time
         t += dt;
