@@ -20,6 +20,25 @@ const double board_size = 4.0; // Size of the board
 void getAcc(const double pos[][3], const double mass[], double acc[][3], int N) {
 
     // TODO:
+    for (int i = 0; i < N; i++) {
+        acc[i][0] = 0.0;
+        acc[i][1] = 0.0;
+        acc[i][2] = 0.0;
+        for (int j = 0; j < N; j++) {
+            if (i != j) {
+                double dx = pos[j][0] - pos[i][0];
+                double dy = pos[j][1] - pos[i][1];
+                double dz = pos[j][2] - pos[i][2];
+                double r2 = dx * dx + dy * dy + dz * dz + softening * softening;
+                double inv_r = 1.0 / sqrt(r2);
+                double inv_r3 = inv_r * inv_r * inv_r;
+                acc[i][0] += G * mass[j] * dx * inv_r3;
+                acc[i][1] += G * mass[j] * dy * inv_r3;
+                acc[i][2] += G * mass[j] * dz * inv_r3;
+            }
+        }
+    }
+
 
 }
 
@@ -128,23 +147,49 @@ int main(int argc, char *argv[]) {
     for (int step = 0; step < Nt; step++) {
         
         // TODO: (1/2) kick
-
+        vel[step][0] += 0.5 * acc[step][0] * dt;
+        vel[step][1] += 0.5 * acc[step][1] * dt;
+        vel[step][2] += 0.5 * acc[step][2] * dt;
 
         // TODO: Drift
+        pos[step][0] += vel[step][0] * dt;
+        pos[step][1] += vel[step][1] * dt;
+        pos[step][2] += vel[step][2] * dt;
       
 
         // TODO: Ensure particles stay within the board limits
+        if (pos[step][0] > board_size) {
+            pos[step][0] = board_size;
+        } else if (pos[step][0] < -board_size) {
+            pos[step][0] = -board_size;
+        }
+
+        if(pos[step][1] > board_size) {
+            pos[step][1] = board_size;
+        } else if (pos[step][1] < -board_size) {
+            pos[step][1] = -board_size;
+        }
+
+        if (pos[step][2] > board_size) {
+            pos[step][2] = board_size;
+        } else if (pos[step][2] < -board_size) {
+            pos[step][2] = -board_size;
+        }
+
 
         // Update accelerations
         getAcc(pos, mass, acc, N);
 
         // TODO: (1/2) kick
+        vel[step][0] += 0.5 * acc[step][0] * dt;
+        vel[step][1] += 0.5 * acc[step][1] * dt;
+        vel[step][2] += 0.5 * acc[step][2] * dt;
 
         // Update time
         t += dt;
 
         // For debug: save positions to CSV at each step
-        // savePositionsToCSV(pos, N, step, filename);
+        savePositionsToCSV(pos, N, step, filename);
     }
 
     // Clean up dynamically allocated memory
