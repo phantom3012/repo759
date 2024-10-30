@@ -155,7 +155,6 @@ int main(int argc, char *argv[]) {
     // Main simulation loop
     #pragma omp parallel for schedule(dynamic)
     for (int step = 0; step < Nt; step++) {
-        std::cout << "Number of threads in use: " << omp_get_num_threads() << std::endl;
         
         // TODO: (1/2) kick
         #pragma omp parallel for schedule(dynamic)
@@ -230,6 +229,7 @@ int main(int argc, char *argv[]) {
 
     end = high_resolution_clock::now();
     duration_sec = std::chrono::duration_cast<duration<double, std::milli> >(end - start);
+    std::cout << "Number of threads: " << num_threads << std::endl;
     std::cout << "time: " << duration_sec.count() << "ms\n";
 
     return 0;
