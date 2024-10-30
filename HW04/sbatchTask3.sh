@@ -9,6 +9,6 @@
 
 cd $SLURM_SUBMIT_DIR
 
-g++ task3.cpp -Wall -O3 -std=c++17 -o task3
+g++ task3.cpp -Wall -O3 -std=c++17 -o task3 -fopenmp
 
 ./task3 100 10 8

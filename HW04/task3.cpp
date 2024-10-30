@@ -26,7 +26,7 @@ void getAcc(const double pos[][3], const double mass[], double acc[][3], int N) 
         acc[i][0] = 0.0;
         acc[i][1] = 0.0;
         acc[i][2] = 0.0;
-        #pragma omp parallel for nowait
+        #pragma omp parallel for 
         for (int j = 0; j < N; j++) {
             if (i != j) {
                 double dx = pos[j][0] - pos[i][0];
@@ -217,7 +217,7 @@ int main(int argc, char *argv[]) {
         t += dt;
 
         // For debug: save positions to CSV at each step
-        savePositionsToCSV(pos, N, step, filename);
+       // savePositionsToCSV(pos, N, step, filename);
     }
         
 
