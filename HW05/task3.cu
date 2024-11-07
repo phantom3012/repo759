@@ -1,5 +1,7 @@
 #include <random>
-#include <stdio.h>
+#include <cstdio.h>
+#include <iostream>
+#include <cuda.h>
 
 #include "vscale.cuh"
 
@@ -51,11 +53,11 @@ int main(int argc, char *argv[]) {
     cudaMemcpy(b, dB, n*sizeof(float), cudaMemcpyDeviceToHost); 
     cudaEventElapsedTime(&elapsedTime, start, stop);
     
-    printf("%lu\n", n);
-    printf("%f\n", elapsedTime);
-    printf("%f\n", b[0]);
-    printf("%f\n", b[n-1]); 
-
+    std::cout << n << std::endl;
+    std::cout << elapsedTime << std::endl;
+    std::cout << b[0] << std::endl;
+    std::cout << b[n-1] << std::endl;
+    std::cout << "\n";
     // clean up
 
     // destroy events
