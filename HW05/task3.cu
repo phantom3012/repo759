@@ -1,7 +1,7 @@
 #include <iostream>
 #include <random>
 
-#include "vscale.cu"
+#include "vscale.cuh"
 
 const int THREADS = 512;
 
@@ -18,21 +18,16 @@ int main(int argc, char *argv[]) {
     cudaEventCreate(&stop);
     float elapsedTime;
 
-    int n = std::stoi(argv[1]); //get the number of elments from the command line
+    std::size_t n = std::stoi(argv[1]); //get the number of elments from the command line
 
     //generate the random arrays a and b
     float a[n];
     float b[n];
 
     //fill the arrays with random numbers corresponding to their range
-    for(int i = 0; i < n; i++) {
+    for(std::size_t i = 0; i < n; i++) {
         a[i] = distA(generator);
         b[i] = distB(generator);
-    }
-
-    for(int i = 0; i < n; i++) {
-	    std::cout << "a[" << i << "] = " << a[i] << "\n";
-	    std::cout << "b[" << i << "] = " << b[i] << "\n";
     }
 
     int numberOfBlocks = (n + THREADS -1)/THREADS;
@@ -51,8 +46,6 @@ int main(int argc, char *argv[]) {
     //clean up
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
-    free(a);
-    free(b);
 
     return 0;
 }
