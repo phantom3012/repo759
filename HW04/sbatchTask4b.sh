@@ -3,9 +3,9 @@
 #SBATCH --partition=instruction             ##Use the instruction partition
 #SBATCH --time=0-00:03:00
 #SBATCH -c 8
-#SBATCH --job-name=HW04_task4a
+#SBATCH --job-name=HW04_task4b
 #SBATCH --ntasks=1
-#SBATCH -o task4a.out -e task4a.err ## Set the output file and error file
+#SBATCH -o task4b.out -e task4b.err ## Set the output file and error file
 
 cd $SLURM_SUBMIT_DIR
 
