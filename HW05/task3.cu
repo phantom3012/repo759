@@ -1,5 +1,5 @@
-#include <iostream>
 #include <random>
+#include <stdio.h>
 
 #include "vscale.cuh"
 
@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
     std::random_device entropy_source;
     std::mt19937 generator(entropy_source());
     std::uniform_real_distribution<float> distA(-10, 10);
-    std::uniform_real_distribution<float> distB(-1, 1);
+    std::uniform_real_distribution<float> distB(0, 1);
     
     //CUDA timing events
     cudaEvent_t start, stop;
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
         b[i] = distB(generator);
     }
 
-    int numberOfBlocks = (n + THREADS -1)/THREADS;
+    const int numberOfBlocks = (n + THREADS -1)/THREADS;
 
     cudaEventRecord(start);
     vscale<<<numberOfBlocks,THREADS>>>(a,b,n);
@@ -39,10 +39,10 @@ int main(int argc, char *argv[]) {
 
     cudaEventElapsedTime(&elapsedTime, start, stop);
     
-    std::cout << n << "\n";
-    std:: cout << elapsedTime << "\n";
-    std::cout << b[0] << "\n";
-    std::cout << b[n-1] << "\n";
+    printf("%lu\n", n);
+    printf("%f\n", elapsedTime);
+    printf("%f\n", b[0]);
+    printf("%f\n", b[n-1]); 
 
     //clean up
     cudaEventDestroy(start);

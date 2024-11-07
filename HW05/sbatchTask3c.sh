@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 #SBATCH --partition=instruction             ##Use the instruction partition
-#SBATCH --time=0-00:03:00
+#SBATCH --time=0-00:10:00
 #SBATCH -c 1
 #SBATCH --gpus-per-task=1
 #SBATCH --job-name=HW05_task3c
@@ -15,6 +15,6 @@ module load gcc/11.3.0
 
 nvcc task3.cu vscale.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task3
 
-for ((i = 10; i < 30; i++)); do
+for ((i = 10; i <= 29; i++)); do
     ./task3 $((2**i));
 done
