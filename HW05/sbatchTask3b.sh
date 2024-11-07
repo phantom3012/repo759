@@ -15,4 +15,4 @@ module load gcc/11.3.0
 
 nvcc task3.cu vscale.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task3
 
-./task3 10
+./task3 536870912

@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
     std::size_t n = std::stoi(argv[1]); // get the number of elments from the command line
 
     // generate the random arrays a and b
-    float *a = malloc(n * sizeof(float));
-    float *b = malloc(n * sizeof(float));
+    float *a = (float*) malloc(n * sizeof(float));
+    float *b = (float*) malloc(n * sizeof(float));
 
     float *dA, *dB;
 
