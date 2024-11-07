@@ -2,14 +2,12 @@
 #include <stdio.h>
 
 __global__ void factorialKernel(){
-    int n = 8;
-    int fact = 1;
-    for(int i = 1; i <= n; i++){
-        for(int j = 1; j <= i; j++){
-            fact *= j;
-        }
-        std::printf("%d! = %d\n", i, fact);
-    }
+   int a = threadIdx.x+1; //Get the number of the factorial we want to find (given as a in the question)
+   int b = 1; // declare a variable to hold the factorial value (given as b in the question)
+   for (int i = 1 ; i <=a ; i++){
+	  b *= i;
+   }
+   printf("%d!=%d\n", a , b); 
     
 }
 
