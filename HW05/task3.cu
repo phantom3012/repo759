@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
     int n = std::stoi(argv[1]); //get the number of elments from the command line
 
     //generate the random arrays a and b
-    const float *a = (float*) malloc(n*sizeof(float)) ;
-    float *b = (float*) malloc(n*sizeof(float));
+    float a[n];
+    float b[n];
 
     //fill the arrays with random numbers corresponding to their range
     for(int i = 0; i < n; i++) {
