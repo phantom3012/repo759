@@ -8,7 +8,7 @@ const int THREADS = 8;
 
 __global__ void weightedAddition(int a, int *dA) {
     int weightedSum = a * threadIdx.x + blockIdx.x;
-    dA[THREADS*blockIdx.x + threadIdx.x] = weightedSum;
+    dA[blockDim.x*blockIdx.x + threadIdx.x] = weightedSum;
 }
 
 int main() {
