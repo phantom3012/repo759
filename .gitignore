@@ -11,5 +11,7 @@
 !HW04/*.py
 !HW04/*.png
 !HW04/*.txt
+!HW05/*.py
+!HW05/*.png
 !*.cu
 !*.cuh
