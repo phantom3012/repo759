@@ -6,6 +6,7 @@
 #SBATCH --gpus-per-task=1
 #SBATCH --job-name=HW05_task3c
 #SBATCH --ntasks=1
+#SBATCH --exclusive
 #SBATCH -o task3c.out -e task3c.err ## Set the output file and error file
 
 cd $SLURM_SUBMIT_DIR
