@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
     std::mt19937 generator(entropy_source());
     std::uniform_real_distribution<float> distA(-10, 10);
     std::uniform_real_distribution<float> distB(-1, 1);
-
+    
     //CUDA timing events
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -38,7 +38,8 @@ int main(int argc, char *argv[]) {
     cudaEventSynchronize(stop);
 
     cudaEventElapsedTime(&elapsedTime, start, stop);
-
+    
+    std::cout << n << "\n";
     std:: cout << elapsedTime << "\n";
     std::cout << b[0] << "\n";
     std::cout << b[n-1] << "\n";
