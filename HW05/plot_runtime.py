@@ -62,7 +62,7 @@ plt.gca().xaxis.set_major_locator(ticker.FixedLocator(all_sizes))
 plt.tight_layout(pad=2.0)
 
 # Save the plot as a PNG file
-plt.savefig('time_vs_size.png')
+plt.savefig('task3.pdf')
 
 # Show the plot
 plt.show()
