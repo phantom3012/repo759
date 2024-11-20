@@ -3,7 +3,7 @@
 #include <random>
 #include <iostream>
 
-#include "matmul.cuh"
+#include "matmul.cu"
 
 int main(int argc, char* argv[]){
 
