@@ -31,7 +31,8 @@ void matmul(const float* A, const float* B, float* C, size_t n, unsigned int thr
     // dim3 griddim((n+sqrt(threads_per_block)-1 / sqrt(threads_per_block)), (n+sqrt(threads_per_block)-1 / sqrt(threads_per_block)));
     // dim3 blockdim(sqrt(threads_per_block), sqrt(threads_per_block));
 
-    int numBlocks = (n+threads_per_block-1) / threads_per_block;
+    int num_threads = n*n;
+    int numBlocks = (num_threads+threads_per_block-1) / threads_per_block;
     dim3 threadsPerBlock(threads_per_block);
     dim3 numBlocks(numBlocks);
     matmul_kernel<<<numBlocks, threadsPerBlock>>>(A, B, C, n);
