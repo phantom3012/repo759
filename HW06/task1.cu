@@ -1,6 +1,7 @@
 #include <cuda.h>
 #include <stdio.h>
 #include <random>
+#include <iostream>
 
 #include "matmul.cuh"
 
@@ -41,11 +42,8 @@ int main(int argc, char* argv[]){
     cudaMemcpy(dA, a, n*n*sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(dB, b, n*n*sizeof(float), cudaMemcpyHostToDevice);
 
-    dim3 gridDim((n + threads_per_block - 1) / threads_per_block, (n + threads_per_block - 1) / threads_per_block);
-    dim3 blockDim(threads_per_block, threads_per_block);
-
     cudaEventRecord(start);
-    matmul<<<gridDim, blockDim>>>(dA, dB, dC, n);
+    matmul(dA, dB, dC, n);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 
