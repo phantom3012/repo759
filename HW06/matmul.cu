@@ -11,11 +11,9 @@
 __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
-    if (i < n && j < n){
-        C[i * n + j] = 0;
-        for (int k = 0; k < n; k++){
-            C[i * n + j] = A[i * n + k] * B[k * n + j];
-        }
+    int k = blockIdx.z * blockDim.z + threadIdx.z;
+    if (i < n && j < n && k < n){
+        C[i * n + j] = A[i * n + k] * B[k * n + j];
     }
 }
 
@@ -24,6 +22,6 @@ __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n
 // cudaEventSynchronize to time it, that call serves the same purpose as cudaDeviceSynchronize).
 void matmul(const float* A, const float* B, float* C, size_t n, unsigned int threads_per_block){
     dim3 gridDim((n + threads_per_block - 1) / threads_per_block, (n + threads_per_block - 1) / threads_per_block);
-    dim3 blockDim(threads_per_block, threads_per_block);
+    dim3 blockDim(threads_per_block, threads_per_block, threads_per_block);
     matmul_kernel<<<gridDim, blockDim>>>(A, B, C, n);
 }
