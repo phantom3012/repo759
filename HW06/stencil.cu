@@ -8,15 +8,14 @@ __global__ void stencil_kernel(const float* image, const float* mask, float* out
     float *shared_image = shared_mem;
     float *shared_mask = shared_mem + blockDim.x + 2 * R;
 
-    std::size_t threadIndex = threadIdx.x;
-    std::size_t globalIndex = blockIdx.x * blockDim.x + threadIndex;
+    int threadIndex = threadIdx.x;
+    int globalIndex = blockIdx.x * blockDim.x + threadIndex;
 
     if(threadIndex < 2 * R + 1){
         shared_mask[threadIndex] = mask[threadIndex];
     }
 
     int shared_start = blockIdx.x * blockDim.x - R;
-    int shared_end = shared_start + blockDim.x + 2 * R;
 
     if(shared_start + threadIndex >= 0 && shared_start + threadIndex < n){
         shared_image[threadIndex] = image[shared_start + threadIndex];
