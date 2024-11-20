@@ -22,7 +22,6 @@ __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n
 // You can consider following the kernel call with cudaDeviceSynchronize (but if you use 
 // cudaEventSynchronize to time it, that call serves the same purpose as cudaDeviceSynchronize).
 void matmul(const float* A, const float* B, float* C, size_t n, unsigned int threads_per_block){
-    dim3 gridDim(((n + threads_per_block - 1) / threads_per_block), 1, 1);
-    dim3 blockDim(threads_per_block,1,1);
-    matmul_kernel<<<gridDim, blockDim>>>(A, B, C, n);
+    int blockSize = (n + threads_per_block - 1) / threads_per_block;
+    matmul_kernel<<<blockSize, threads_per_block>>>(A, B, C, n);
 }
