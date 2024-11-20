@@ -3,7 +3,7 @@
 #include <random>
 #include <iostream>
 
-#include "matmul.cu"
+#include "matmul.cuh"
 
 int main(int argc, char* argv[]){
 
@@ -26,7 +26,8 @@ int main(int argc, char* argv[]){
     float *b = (float*) malloc(n * n * sizeof(float));
     float *c = (float*) malloc(n * n * sizeof(float));
 
-    float *dA, *dB, *dC;
+    const float *dA, *dB;
+    float *dC;
 
     // allocate memory on the device
     cudaMalloc((void**)&dA, sizeof(float) * n * n);
