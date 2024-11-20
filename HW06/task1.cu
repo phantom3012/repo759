@@ -45,7 +45,7 @@ int main(int argc, char* argv[]){
     cudaMemset(dC, 0, n*n*sizeof(float));
 
     cudaEventRecord(start);
-    matmul(dA, dB, dC, n, threads_per_block);
+    matmul(dA, dB, dC, n*n, threads_per_block);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 
