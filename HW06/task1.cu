@@ -43,7 +43,7 @@ int main(int argc, char* argv[]){
     // copy the randomly generated arrays to the device
     cudaMemcpy(dA, a, n*n*sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(dB, b, n*n*sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(dC, C, n*n*siseof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(dC, c, n*n*sizeof(float), cudaMemcpyHostToDevice);
     
     cudaEventRecord(start);
     matmul(dA, dB, dC, n, threads_per_block);
