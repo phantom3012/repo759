@@ -10,10 +10,12 @@
 // - 1D kernel configuration
 __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n){
     int i = blockIdx.x * blockDim.x + threadIdx.x;
-    for (std::size_t j = 0; j < n; j++){
-        C[i * n + j] = 0;
-        for (std::size_t k = 0; k < n; k++){
-            C[i * n + j] += A[i * n + k] * B[k * n + j];
+    if(i < n){
+        for (std::size_t j = 0; j < n; j++){
+            C[i * n + j] = 0;
+            for (std::size_t k = 0; k < n; k++){
+                C[i * n + j] += A[i * n + k] * B[k * n + j];
+            }
         }
     }
 }

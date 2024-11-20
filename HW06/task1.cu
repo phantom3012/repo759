@@ -24,6 +24,7 @@ int main(int argc, char* argv[]){
     // generate the random arrays a and b
     float *a = (float*) malloc(n * n * sizeof(float));
     float *b = (float*) malloc(n * n * sizeof(float));
+    float *c = (float*) malloc(n * n * sizeof(float));
 
     float *dA, *dB, *dC;
 
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]){
     cudaEventSynchronize(stop);
 
     // copy the results back to the host
-    cudaMemcpy(b, dC, n*n*sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(c, dC, n*n*sizeof(float), cudaMemcpyDeviceToHost);
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
     std::cout << b[n*n-1] << std::endl;
