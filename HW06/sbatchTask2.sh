@@ -15,6 +15,6 @@ module load gcc/11.3.0
 
 nvcc task2.cu stencil.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task2
 
-for ((i = 5; i <= 14; i++)); do
+for ((i = 10; i <= 29; i++)); do
     ./task2 $((2**i)) 128 1024; # threads_per_block = 1024
 done
