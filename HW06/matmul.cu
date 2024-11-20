@@ -11,11 +11,14 @@
 __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n){
 
     int tx = threadIdx.x;
-    int bx = blockIdx.x;
+    int ty = threadIdx.y;
+
+    float sum = 0;
 
     for (std::size_t k = 0; k < n; k++){
-        C[bx * n + tx] = A[bx * n + k] * B[k * n + tx];
+        sum += A[ty * n + k] * B[k * n + tx];
     }
+    C[ty * n + tx] = sum;
 }
 
 // Makes one call to matmul_kernel with threads_per_block threads per block.
@@ -23,5 +26,6 @@ __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n
 // cudaEventSynchronize to time it, that call serves the same purpose as cudaDeviceSynchronize).
 void matmul(const float* A, const float* B, float* C, size_t n, unsigned int threads_per_block){
     int blockSize = (n + threads_per_block - 1) / threads_per_block;
-    matmul_kernel<<<blockSize, threads_per_block>>>(A, B, C, n);
+    dim3 blockdim(threads_per_block, threads_per_block);
+    matmul_kernel<<<blockdim, threads_per_block>>>(A, B, C, n);
 }
