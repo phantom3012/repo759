@@ -42,6 +42,7 @@ int main(int argc, char* argv[]){
     // copy the randomly generated arrays to the device
     cudaMemcpy(dA, a, n*n*sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(dB, b, n*n*sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemset(dC, 0, n*n*sizeof(float));
 
     cudaEventRecord(start);
     matmul(dA, dB, dC, n, threads_per_block);
@@ -52,8 +53,9 @@ int main(int argc, char* argv[]){
     cudaMemcpy(c, dC, n*n*sizeof(float), cudaMemcpyDeviceToHost);
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
-    std::cout << b[n*n-1] << std::endl;
-    std::cout << elapsedTime << std::endl;
+    std::cout << n << "\n" << std::endl;
+    std::cout << b[n*n-1] << "\n" << std::endl;
+    std::cout << elapsedTime << "\n" << std::endl;
 
     // clean up
     free(a);
