@@ -1,5 +1,4 @@
 #include "matmul.cuh"
-#include <cmath>
 #include <cuda.h>
 
 __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n){
@@ -17,13 +16,12 @@ __global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n
 }
 
 void matmul(const float* A, const float* B, float* C, size_t n, unsigned int threads_per_block){
-    // dim3 griddim((n+sqrt(threads_per_block)-1 / sqrt(threads_per_block)), (n+sqrt(threads_per_block)-1 / sqrt(threads_per_block)));
-    // dim3 blockdim(sqrt(threads_per_block), sqrt(threads_per_block));
-
     int num_threads = n*n;
     int numOfBlocks = (num_threads+threads_per_block-1) / threads_per_block;
+
     dim3 threadsPerBlock(threads_per_block);
     dim3 numBlocks(numOfBlocks);
+    
     matmul_kernel<<<numBlocks, threadsPerBlock>>>(A, B, C, n);
     cudaDeviceSynchronize();
 }
