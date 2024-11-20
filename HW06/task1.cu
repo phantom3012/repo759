@@ -37,13 +37,14 @@ int main(int argc, char* argv[]){
     for(std::size_t i = 0; i < n * n; i++) {
         a[i] = distA(generator);
         b[i] = distB(generator);
+        c[i] = 0;
     }
 
     // copy the randomly generated arrays to the device
     cudaMemcpy(dA, a, n*n*sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(dB, b, n*n*sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemset(dC, 0, n*n*sizeof(float));
-
+    cudaMemcpy(dC, C, n*n*siseof(float), cudaMemcpyHostToDevice);
+    
     cudaEventRecord(start);
     matmul(dA, dB, dC, n, threads_per_block);
     cudaEventRecord(stop);
@@ -60,6 +61,7 @@ int main(int argc, char* argv[]){
     // clean up
     free(a);
     free(b);
+    free(c);
     cudaFree(dA);
     cudaFree(dB);
     cudaFree(dC);
