@@ -1,6 +1,7 @@
 #include <cuda.h>
 #include <stdio.h>
 #include <random>
+#include <iostream>
 
 #include "stencil.cuh"
 
