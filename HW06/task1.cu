@@ -26,8 +26,7 @@ int main(int argc, char* argv[]){
     float *b = (float*) malloc(n * n * sizeof(float));
     float *c = (float*) malloc(n * n * sizeof(float));
 
-    const float *dA, *dB;
-    float *dC;
+    float *dA, *dB, *dC;
 
     // allocate memory on the device
     cudaMalloc((void**)&dA, sizeof(float) * n * n);
@@ -45,7 +44,7 @@ int main(int argc, char* argv[]){
     cudaMemcpy(dB, b, n*n*sizeof(float), cudaMemcpyHostToDevice);
 
     cudaEventRecord(start);
-    matmul(dA, dB, dC, n);
+    matmul(dA, dB, dC, n, threads_per_block);
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
 
