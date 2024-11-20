@@ -54,8 +54,8 @@ int main(int argc, char* argv[]){
     cudaMemcpy(c, dC, n*n*sizeof(float), cudaMemcpyDeviceToHost);
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
-    std::cout << n << "\n" << std::endl;
-    std::cout << c[(n*n)-1] << "\n" << std::endl;
+    std::cout << n << std::endl;
+    std::cout << c[(n*n)-1] << std::endl;
     std::cout << elapsedTime << "\n" << std::endl;
 
     // clean up
