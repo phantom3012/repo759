@@ -45,7 +45,7 @@ int main(int argc, char* argv[]){
 
     int *dA_int, *dB_int, *dC_int;
     float *dA_float, *dB_float, *dC_float;
-    double *dA_double, *dB_double, *dC_double
+    double *dA_double, *dB_double, *dC_double;
 
     // allocate memory on the device
     cudaMalloc((void**)&dA_int, sizeof(int) * n * n);
@@ -97,8 +97,8 @@ int main(int argc, char* argv[]){
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
     std::cout << n << std::endl;
-    std::cout << c[0] << "\n" << std::endl;
-    std::cout << c[(n*n)-1] << "\n" << std::endl;
+    std::cout << c_int[0] << "\n" << std::endl;
+    std::cout << c_int[(n*n)-1] << "\n" << std::endl;
     std::cout << elapsedTime << "\n" << std::endl;
 
     cudaEventRecord(start);
@@ -109,8 +109,8 @@ int main(int argc, char* argv[]){
     cudaMemcpy(c_float, dC_float, sizeof(float) * n * n, cudaMemcpyDeviceToHost);
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
-    std::cout << c[0] << std::endl;
-    std::cout << c[(n*n)-1] << std::endl;
+    std::cout << c_float[0] << std::endl;
+    std::cout << c_float[(n*n)-1] << std::endl;
     std::cout << elapsedTime << "\n" << std::endl;
 
     cudaEventRecord(start);
@@ -121,14 +121,8 @@ int main(int argc, char* argv[]){
     cudaMemcpy(c_double, dC_double, sizeof(double) * n * n, cudaMemcpyDeviceToHost);
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
-    std::cout << c[0] << std::endl;
-    std::cout << c[(n*n)-1] << std::endl;
+    std::cout << c_double[0] << std::endl;
+    std::cout << c_double[(n*n)-1] << std::endl;
     std::cout << elapsedTime << "\n" << std::endl;
 
-    cudaMemcpy(c, dC, n*n*sizeof(float), cudaMemcpyDeviceToHost);
-    cudaEventElapsedTime(&elapsedTime, start, stop);
-
-    std::cout << n << std::endl;
-    std::cout << c[(n*n)-1] << std::endl;
-    std::cout << elapsedTime
 }
