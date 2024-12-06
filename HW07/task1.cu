@@ -10,21 +10,15 @@ int main(int argc, char* argv[]){
     std::random_device entropy_source;
     std::mt19937 generator(entropy_source());
 
-    std::uniform_int_distribution<int> distA_int(-10, 10);
-    std::uniform_int_distribution<int> distB_int(-10, 10);
-
-    std::uniform_real_distribution<float> distA_float(-1, 1);
-    std::uniform_real_distribution<float> distB_float(-1, 1);
-
-    std::uniform_real_distribution<double> distA_double(-1, 1);
-    std::uniform_real_distribution<double> distB_double(-1, 1);
-
+    std::uniform_int_distribution<int> dist_int(-10, 10);
+    std::uniform_real_distribution<float> dist_float(-10, 10);
+    std::uniform_real_distribution<double> dist_double(-10, 10);
 
     // CUDA timing events
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
-    float elapsedTime;
+    float elapsedTime1, elapsedTime2, elapsedTime3;
 
     std::size_t n = std::stoi(argv[1]); // get the number of elments of the array from the command line
     std::size_t block_dim = std::stoi(argv[2]); // get the block size from the command line
@@ -62,16 +56,16 @@ int main(int argc, char* argv[]){
 
     // fill the arrays with random numbers corresponding to their range
     for(std::size_t i = 0; i < n * n; i++) {
-        a_int[i] = distA_int(generator);
-        b_int[i] = distB_int(generator);
+        a_int[i] = dist_int(generator);
+        b_int[i] = dist_int(generator);
         c_int[i] = 0;
 
-        a_float[i] = distA_float(generator);
-        b_float[i] = distB_float(generator);
+        a_float[i] = dist_float(generator);
+        b_float[i] = dist_float(generator);
         c_float[i] = 0;
 
-        a_double[i] = distA_double(generator);
-        b_double[i] = distB_double(generator);
+        a_double[i] = dist_double(generator);
+        b_double[i] = dist_double(generator);
         c_double[i] = 0;
     }
 
@@ -91,38 +85,35 @@ int main(int argc, char* argv[]){
     cudaEventRecord(start);
     matmul_1(dA_int, dB_int, dC_int, n, block_dim);
     cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
     
     cudaMemcpy(c_int, dC_int, sizeof(float) * n * n, cudaMemcpyDeviceToHost);
-    cudaEventElapsedTime(&elapsedTime, start, stop);
+    cudaEventElapsedTime(&elapsedTime1, start, stop);
 
     std::cout << n << std::endl;
     std::cout << c_int[0] << "\n" << std::endl;
     std::cout << c_int[(n*n)-1] << "\n" << std::endl;
-    std::cout << elapsedTime << "\n" << std::endl;
+    std::cout << elapsedTime1 << "\n" << std::endl;
 
     cudaEventRecord(start);
     matmul_2(dA_float, dB_float, dC_float, n, block_dim);
     cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
 
     cudaMemcpy(c_float, dC_float, sizeof(float) * n * n, cudaMemcpyDeviceToHost);
-    cudaEventElapsedTime(&elapsedTime, start, stop);
+    cudaEventElapsedTime(&elapsedTime2, start, stop);
 
     std::cout << c_float[0] << std::endl;
     std::cout << c_float[(n*n)-1] << std::endl;
-    std::cout << elapsedTime << "\n" << std::endl;
+    std::cout << elapsedTime2 << "\n" << std::endl;
 
     cudaEventRecord(start);
     matmul_3(dA_double, dB_double, dC_double, n, block_dim);
     cudaEventRecord(stop);
-    cudaEventElapsedTime(&elapsedTime, start, stop);
 
     cudaMemcpy(c_double, dC_double, sizeof(double) * n * n, cudaMemcpyDeviceToHost);
-    cudaEventElapsedTime(&elapsedTime, start, stop);
+    cudaEventElapsedTime(&elapsedTime3, start, stop);
 
     std::cout << c_double[0] << std::endl;
     std::cout << c_double[(n*n)-1] << std::endl;
-    std::cout << elapsedTime << "\n" << std::endl;
+    std::cout << elapsedTime3 << "\n" << std::endl;
 
 }

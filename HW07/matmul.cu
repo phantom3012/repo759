@@ -1,7 +1,7 @@
 #include "matmul.cuh"
 #include <cuda.h>
 
-__global__ void matmul_kernel_int(const int* A, const int* B, int* C, size_t n, unsigned int block_dim){
+__global__ void matmul_kernel_int(const int* A, const int* B, int* C, size_t n){
 
     int bx = blockIdx.x;
     int by = blockIdx.y;
@@ -9,39 +9,38 @@ __global__ void matmul_kernel_int(const int* A, const int* B, int* C, size_t n, 
     int tx = threadIdx.x;
     int ty = threadIdx.y;
 
-    int aBegin = n * block_dim * by;
-    int aEnd = aBegin + n - 1;
-    int aStep = block_dim;
+    extern __shared__ int shared_mem[];
+    int *A_local = shared_mem;
+    int *B_local = &shared_mem[blockDim.x * blockDim.y];
 
-    int bBegin = block_dim * bx;
-    int bStep = block_dim * n;
+    int row = by * blockDim.y + ty;
+    int col = bx * blockDim.x + tx;
 
-    float Csub = 0;
+    int Csub = 0;
 
-    __shared__ int As[block_dim][block_dim];
-    __shared__ int Bs[block_dim][block_dim];
-
-    for (int a = aBegin, b = bBegin; a <= aEnd; a += aStep, b += bStep){
-        if(a + n * ty + tx >= n * n || b + n * ty + tx >= n * n){
-            return;
+    for(int i = 0 ; i < (int)n ; i += blockDim.x){
+        if(row < n && (i+tx) < n){
+            A_local[ty * blockDim.x + tx] = A[row * n + i + tx];
+        }else{
+            A_local[ty * blockDim.x + tx] = 0;
         }
-        As[ty][tx] = A[a + n * ty + tx];
-        Bs[ty][tx] = B[b + n * ty + tx];
-
+        if(col < n && (i+ty) < n){
+            B_local[ty * blockDim.x + tx] = B[(i + ty) * n + col];
+        }else{
+            B_local[ty * blockDim.x + tx] = 0;
+        }
         __syncthreads();
 
-        for (int k = 0; k < block_dim; ++k){
-            Csub += As[ty][k] * Bs[k][tx];
+        for(int j = 0 ; j < blockDim.x ; j++){
+            Csub += A_local[ty * blockDim.x + j] * B_local[j * blockDim.x + tx];
         }
-
-        __syncthreads();
     }
-
-    int c = n * block_dim * by + block_dim * bx;
-    C[c + n * ty + tx] = Csub;
+    if(row < n && col < n){
+        C[row * n + col] = Csub;
+    }
 }
 
-__global__ void matmul_kernel_float(const float* A, const float* B, float* C, size_t n, unsigned int block_dim){
+__global__ void matmul_kernel_float(const float* A, const float* B, float* C, size_t n){
 
     int bx = blockIdx.x;
     int by = blockIdx.y;
@@ -49,39 +48,38 @@ __global__ void matmul_kernel_float(const float* A, const float* B, float* C, si
     int tx = threadIdx.x;
     int ty = threadIdx.y;
 
-    int aBegin = n * block_dim * by;
-    int aEnd = aBegin + n - 1;
-    int aStep = block_dim;
+    extern __shared__ float shared_mem[];
+    float *A_local = shared_mem;
+    float *B_local = &shared_mem[blockDim.x * blockDim.y];
 
-    int bBegin = block_dim * bx;
-    int bStep = block_dim * n;
+    int row = by * blockDim.y + ty;
+    int col = bx * blockDim.x + tx;
 
     float Csub = 0;
 
-    __shared__ float As[block_dim][block_dim];
-    __shared__ float Bs[block_dim][block_dim];
-
-    for (int a = aBegin, b = bBegin; a <= aEnd; a += aStep, b += bStep){
-        if(a + n * ty + tx >= n * n || b + n * ty + tx >= n * n){
-            return;
+    for(int i = 0 ; i < (int)n ; i += blockDim.x){
+        if(row < n && (i+tx) < n){
+            A_local[ty * blockDim.x + tx] = A[row * n + i + tx];
+        }else{
+            A_local[ty * blockDim.x + tx] = 0;
         }
-        As[ty][tx] = A[a + n * ty + tx];
-        Bs[ty][tx] = B[b + n * ty + tx];
-
+        if(col < n && (i+ty) < n){
+            B_local[ty * blockDim.x + tx] = B[(i + ty) * n + col];
+        }else{
+            B_local[ty * blockDim.x + tx] = 0;
+        }
         __syncthreads();
 
-        for (int k = 0; k < block_dim; ++k){
-            Csub += As[ty][k] * Bs[k][tx];
+        for(int j = 0 ; j < blockDim.x ; j++){
+            Csub += A_local[ty * blockDim.x + j] * B_local[j * blockDim.x + tx];
         }
-
-        __syncthreads();
     }
-
-    int c = n * block_dim * by + block_dim * bx;
-    C[c + n * ty + tx] = Csub;
+    if(row < n && col < n){
+        C[row * n + col] = Csub;
+    }
 }
 
-__global__ void matmul_kernel_double(const double* A, const double* B, double* C, size_t n, unsigned int block_dim){
+__global__ void matmul_kernel_int(const double* A, const double* B, double* C, size_t n){
 
     int bx = blockIdx.x;
     int by = blockIdx.y;
@@ -89,44 +87,42 @@ __global__ void matmul_kernel_double(const double* A, const double* B, double* C
     int tx = threadIdx.x;
     int ty = threadIdx.y;
 
-    int aBegin = n * block_dim * by;
-    int aEnd = aBegin + n - 1;
-    int aStep = block_dim;
+    extern __shared__ double shared_mem[];
+    double *A_local = shared_mem;
+    double *B_local = &shared_mem[blockDim.x * blockDim.y];
 
-    int bBegin = block_dim * bx;
-    int bStep = block_dim * n;
+    int row = by * blockDim.y + ty;
+    int col = bx * blockDim.x + tx;
 
-    float Csub = 0;
+    double Csub = 0;
 
-    __shared__ double As[block_dim][block_dim];
-    __shared__ double Bs[block_dim][block_dim];
-
-    for (int a = aBegin, b = bBegin; a <= aEnd; a += aStep, b += bStep){
-        if(a + n * ty + tx >= n * n || b + n * ty + tx >= n * n){
-            return;
+    for(int i = 0 ; i < (int)n ; i += blockDim.x){
+        if(row < n && (i+tx) < n){
+            A_local[ty * blockDim.x + tx] = A[row * n + i + tx];
+        }else{
+            A_local[ty * blockDim.x + tx] = 0;
         }
-        As[ty][tx] = A[a + n * ty + tx];
-        Bs[ty][tx] = B[b + n * ty + tx];
-
+        if(col < n && (i+ty) < n){
+            B_local[ty * blockDim.x + tx] = B[(i + ty) * n + col];
+        }else{
+            B_local[ty * blockDim.x + tx] = 0;
+        }
         __syncthreads();
 
-        for (int k = 0; k < block_dim; ++k){
-            Csub += As[ty][k] * Bs[k][tx];
+        for(int j = 0 ; j < blockDim.x ; j++){
+            Csub += A_local[ty * blockDim.x + j] * B_local[j * blockDim.x + tx];
         }
-
-        __syncthreads();
     }
-
-    int c = n * block_dim * by + block_dim * bx;
-    C[c + n * ty + tx] = Csub;
+    if(row < n && col < n){
+        C[row * n + col] = Csub;
+    }
 }
-
 __host__ void matmul_1(const int *A, const int *B, int *C, unsigned int n, unsigned int block_dim){
 
     dim3 dimBlock(block_dim, block_dim);
-    dim3 dimGrid(n/dimBlock.x, n/dimBlock.y);
+    dim3 dimGrid((n+block_dim-1)/dimBlock.x, (n+block_dim-1)/dimBlock.y);
 
-    matmul_kernel_int<<<dimGrid, dimBlock>>>(A, B, C, n, block_dim);
+    matmul_kernel_int<<<dimGrid, dimBlock, (2*block_dim*block_dim)*sizeof(int)>>>(A, B, C, n);
 
     cudaDeviceSynchronize();
 }
@@ -134,18 +130,19 @@ __host__ void matmul_1(const int *A, const int *B, int *C, unsigned int n, unsig
 __host__ void matmul_2(const float *A, const float *B, float *C, unsigned int n, unsigned int block_dim){
     
     dim3 dimBlock(block_dim, block_dim);
-    dim3 dimGrid(n/dimBlock.x, n/dimBlock.y);
+    dim3 dimGrid((n+block_dim-1)/dimBlock.x, (n+block_dim-1)/dimBlock.y);
 
-    matmul_kernel_float<<<dimGrid, dimBlock>>>(A, B, C, n, block_dim);
+    matmul_kernel_int<<<dimGrid, dimBlock, (2*block_dim*block_dim)*sizeof(float)>>>(A, B, C, n);
 
     cudaDeviceSynchronize();
 }
 __host__ void matmul_3(const double *A, const double *B, double *C, unsigned int n, unsigned int block_dim){
     
     dim3 dimBlock(block_dim, block_dim);
-    dim3 dimGrid(n/dimBlock.x, n/dimBlock.y);
+    dim3 dimGrid((n+block_dim-1)/dimBlock.x, (n+block_dim-1)/dimBlock.y);
 
-    matmul_kernel_double<<<dimGrid, dimBlock>>>(A, B, C, n, block_dim);
+    matmul_kernel_int<<<dimGrid, dimBlock, (2*block_dim*block_dim)*sizeof(double)>>>(A, B, C, n);
+
     cudaDeviceSynchronize();
 }
 
