@@ -16,13 +16,13 @@ __global__ void reduce_kernel(float *g_idata, float *g_odata, unsigned int n){
 
     for(std::size_t j = blockDim.x/2; j > 0; j >>= 1){
         if(tid < j){
-            shared_mem[tid] += sdata[tid + j];
+            shared_mem[tid] += shared_mem[tid + j];
         }
         __syncthreads();
     }
 
     if(tid == 0){
-        g_odata[blockIdx.x] = sdata[0];
+        g_odata[blockIdx.x] = shared_mem[0];
     }
 }
 

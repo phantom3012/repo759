@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
 
     std::cout << n << std::endl;
     std::cout << input[0] << std::endl;
-    std::cout << elapsedTime << std::endl;
+    std::cout << elapsedTime << "\n" <<std::endl;
 
     cudaFree(d_input);
     cudaFree(d_output);
