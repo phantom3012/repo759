@@ -118,4 +118,30 @@ int main(int argc, char* argv[]){
     std::cout << c_double[(n*n)-1] << std::endl;
     std::cout << elapsedTime3 << "\n" << std::endl;
 
+    free(a_int);
+    free(b_int);
+    free(c_int);
+
+    free(a_float);
+    free(b_float);
+    free(c_float);
+
+    free(a_double);
+    free(b_double);
+    free(c_double);
+
+    cudaFree(dA_int);
+    cudaFree(dB_int);
+    cudaFree(dC_int);
+
+    cudaFree(dA_float);
+    cudaFree(dB_float);
+    cudaFree(dC_float);
+
+    cudaFree(dA_double);
+    cudaFree(dB_double);
+    cudaFree(dC_double);
+
+    return 0;
+
 }
