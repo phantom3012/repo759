@@ -13,8 +13,8 @@ cd $SLURM_SUBMIT_DIR
 module load nvidia/cuda/12.0.0
 module load gcc/11.3.0
 
-nvcc task1.cu matmul.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std c++17 -o task1
+nvcc task2.cu reduce.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std c++17 -o task2
 
 for ((i = 10; i <= 30; i++)); do
-    ./task1 $((2**i)) 1024; # threads_per_block = 1024
+    ./task2 $((2**i)) 1024; # threads_per_block = 1024
 done
