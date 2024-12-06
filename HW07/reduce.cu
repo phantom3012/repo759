@@ -35,8 +35,10 @@ __host__ void reduce(float **input, float **output, unsigned int N, unsigned int
         cudaDeviceSynchronize();
 
         n = num_blocks;
-        cudaMemcpy(*input, *output, sizeof(float) * n, cudaMemcpyDeviceToDevice);
+        float temp;
+        cudaMemcpy(&temp, *input, sizeof(float), cudaMemcpyDeviceToHost);
     }
 
-    cudaMemcpy(*input, *output, sizeof(float), cudaMemcpyDeviceToDevice);
+    *input = *output;
+
 }
