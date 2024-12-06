@@ -45,4 +45,10 @@ int main(int argc, char* argv[]){
     std::cout << input[0] << std::endl;
     std::cout << elapsedTime << std::endl;
 
+    cudaFree(d_input);
+    cudaFree(d_output);
+    free(input);
+
+    return 0;
+
 }
