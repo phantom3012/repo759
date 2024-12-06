@@ -24,9 +24,6 @@ int main(int argc, char* argv[]){
     float *input = (float*) malloc(n * sizeof(float));
     for(std::size_t i = 0; i < n; i++){
         input[i] = dist_float(generator);
-        if(i < 10){
-            std::cout << input[i] << std::endl;
-        }
     }
     float *d_input, *d_output;
 
